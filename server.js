@@ -1,14 +1,5 @@
-const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-// Express middleware
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
 
 // Uses inquirer to perform the initial prompt
 inquirer.
@@ -31,16 +22,25 @@ inquirer.
     .then((data) => {
         switch(data.option){
             case 'View all department':
+                viewDepartments();
                 break;
             case 'View all roles':
+                viewRoles()
                 break;
             case 'View all employees':
+                viewEmployees();
                 break;
             case 'Add a department':
+                addADepartment();
+                break;
+            case 'Add a role':
+                addRole();
                 break;
             case 'Add an employee':
+                addEmployee();
                 break;
             case 'Update an employee role':
+                updateEmployeeRole();
                 break;
         }
     });
@@ -53,15 +53,37 @@ const db = mysql.createConnection(
         password: 'vegetable',
         database: 'employee_db'
     },
-    console.log(`Connected to the movies_db database.`)
-);
+    console.log(`Welcome to the Employee Manager!`)
+); 
 
-// Default reponse for not found request
-app.use((req, res) => {
-    res.status(404).end();
-});
+function viewDepartments() {
 
-// Binds and listen for port
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+}
+
+function viewRoles() {
+
+}
+
+function viewEmployees() {
+
+}
+
+function addADepartment() {
+
+}
+
+function addRole() {
+
+}
+
+function addEmployee() {
+
+}
+
+function updateEmployee() {
+
+}
+
+function updateEmployeeRole() {
+
+}
