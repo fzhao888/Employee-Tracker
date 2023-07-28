@@ -10,7 +10,40 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 
-
+// Uses inquirer to perform the initial prompt
+inquirer.
+    prompt([
+        {
+            type: 'list',
+            name: 'option',
+            message: 'Please choose an option: ',
+            choices: [
+                'View all department',
+                'View all roles',
+                'View all employees',
+                'Add a department',
+                'Add a role',
+                'Add an employee',
+                'Update an employee role'
+            ]
+        }
+    ])
+    .then((data) => {
+        switch(data.option){
+            case 'View all department':
+                break;
+            case 'View all roles':
+                break;
+            case 'View all employees':
+                break;
+            case 'Add a department':
+                break;
+            case 'Add an employee':
+                break;
+            case 'Update an employee role':
+                break;
+        }
+    });
 
 // Connect to database
 const db = mysql.createConnection(
