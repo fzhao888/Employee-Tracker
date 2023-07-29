@@ -20,7 +20,7 @@ inquirer.
         }
     ])
     .then((data) => {
-        switch(data.option){
+        switch (data.option) {
             case 'View all department':
                 viewDepartments();
                 break;
@@ -54,10 +54,19 @@ const db = mysql.createConnection(
         database: 'employee_db'
     },
     console.log(`Welcome to the Employee Manager!`)
-); 
+).promise();
 
 function viewDepartments() {
+    const sql = `SELECT * FROM department;`
+    db.query(sql, (err, results) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log('Displaying departments: ');
+        console.log(results);
 
+    });
 }
 
 function viewRoles() {
