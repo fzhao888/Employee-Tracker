@@ -76,13 +76,17 @@ async function showData(sql) {
 function viewDepartments() {
     console.log('\nDisplaying all departments: \n ');
     const sql = `SELECT *
-     FROM departments;`
+                FROM departments;`
     showData(sql);
 }
 
 function viewRoles() {
     console.log('\nDisplaying all roles: \n ');
-    const sql = `SELECT roles.id, title, departments.name AS department, salary
+    const sql = `SELECT 
+                        roles.id,
+                        title, 
+                        departments.name AS department, 
+                        salary
                 FROM roles 
                 JOIN departments
                 ON roles.department_id = departments.id`;
@@ -90,7 +94,23 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-
+    console.log('\nDisplaying all employees: \n ');
+    const sql = `SELECT 
+                        employees.id,
+                        employees.first_name,
+                        employees.last_name,
+                        roles.title,
+                        departments.name AS department,
+                        roles.salary,
+                        CONCAT(manager.first_name, " ",manager.last_name) as manager
+                FROM employees
+                JOIN roles 
+                ON employees.role_id = roles.id
+                JOIN departments
+                ON roles.department_id = departments.id
+                LEFT JOIN employees manager
+                ON employees.manager_id = manager.id`;
+    showData(sql);
 }
 
 function addADepartment() {
