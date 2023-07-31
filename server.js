@@ -63,11 +63,7 @@ const db = mysql.createConnection(
 );
 prompt();
 
-async function viewDepartments() {
-    console.log('\nDisplaying departments: \n ');
-    const sql = `SELECT *
-     FROM departments;`
-
+async function showData(sql) {
     try {
         const [results] = await db.promise().query(sql);
         console.table(results);
@@ -77,8 +73,20 @@ async function viewDepartments() {
     prompt();
 }
 
-function viewRoles() {
+function viewDepartments() {
+    console.log('\nDisplaying all departments: \n ');
+    const sql = `SELECT *
+     FROM departments;`
+    showData(sql);
+}
 
+function viewRoles() {
+    console.log('\nDisplaying all roles: \n ');
+    const sql = `SELECT roles.id, title, departments.name AS department, salary
+                FROM roles 
+                JOIN departments
+                ON roles.department_id = departments.id`;
+    showData(sql);
 }
 
 function viewEmployees() {
