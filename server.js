@@ -115,7 +115,7 @@ function viewEmployees() {
     showData(sql);
 }
 
- function addADepartment() {
+function addADepartment() {
     console.log('\nAdding department: \n ');
     inquirer.
         prompt([
@@ -128,22 +128,66 @@ function viewEmployees() {
         .then((data) => {
             const sql = `INSERT INTO departments (name)
                         VALUES ("${data.name}");`
-           
-            db.query(sql, (err,results) => {
-                if(err){
+
+            db.query(sql, (err, results) => {
+                if (err) {
                     console.log(err);
                     return;
                 }
                 console.log();
                 console.log(`Added ${data.name} to the database`);
             });
+
+            prompt();
         });
-        
-        prompt();
+
 }
 
 function addRole() {
+    console.log('\nAdding role: \n ');
+    inquirer.
+        prompt([
+            {
+                type: 'input',
+                name: 'name',
+                message: 'Please enter name of role: '
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'Please enter salary: '
+            },
+            {
+                type: 'input',
+                name: 'department',
+                message: 'Please enter department: '
+            }
+        ])
+        .then((data) => {
+            const sql1 = `SELECT id FROM departments
+            WHERE  departments.name = ? ;`
+            const args = [data.name, data.salary];
+            db.promise().query(sql1, data.department)
+                .then((data) => {
+                    args.push(data[0][0].id);
+                    
+                    const sql2 = ` 
+                        INSERT INTO roles (title,salary,department_id)
+                        VALUES (?,?,?);`;
 
+                    db.query(sql2, args,
+                        (err, results) => {
+                            if (err) {
+                                console.log(err);
+                                return;
+                            }
+                            console.log();
+                            console.log(`Added ${args[0]} to the database`);
+                        });
+
+                    prompt();
+                });
+        });
 }
 
 function addEmployee() {
