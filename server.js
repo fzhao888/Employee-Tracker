@@ -326,6 +326,7 @@ function updateEmployeeRole() {
 
     db.promise().query(sql1)
         .then((data) => {
+            const args = [];
             for (let i = 0; i < data[0].length; i++) {
                 employeeArr.push(data[0][i].name);
             }
@@ -342,6 +343,9 @@ function updateEmployeeRole() {
 
                 ])
                 .then((data) => {
+                    // push employee into args
+                    args.push(data.employee);
+
                     // get role id 
                     const roleArr = [];
                     const sql2 = `SELECT title 
@@ -367,10 +371,21 @@ function updateEmployeeRole() {
                                                   WHERE roles.title = "${data.role}"`;
 
                                     db.promise().query(sql3)
-                                    .then((results) => {
-                                        const sql4 = `UPDATE employees
-                                                      SET role_id = ${results[0][0].id}`;
-                                    });
+                                        .then((results) => {
+                                            // update employee's role
+                                            const sql4 = `UPDATE employees
+                                                      SET role_id = ${results[0][0].id}
+                                                      WHERE CONCAT(first_name, " ", last_name) = ? ;`;
+                                            db.query(sql4, args, (err, results) => {
+                                                if(err){
+                                                    console.log(err);
+                                                    return;
+                                                }
+                                                console.log("Updated employee's role");
+                                                prompt();
+                                            });
+
+                                        });
                                 });
 
                         });
