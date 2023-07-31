@@ -63,6 +63,7 @@ const db = mysql.createConnection(
 );
 prompt();
 
+// querys database and shows data then prompts user
 async function showData(sql) {
     try {
         const [results] = await db.promise().query(sql);
@@ -72,6 +73,7 @@ async function showData(sql) {
     }
     prompt();
 }
+
 
 function viewDepartments() {
     console.log('\nDisplaying all departments: \n ');
@@ -113,8 +115,31 @@ function viewEmployees() {
     showData(sql);
 }
 
-function addADepartment() {
-
+ function addADepartment() {
+    console.log('\nAdding department: \n ');
+    inquirer.
+        prompt([
+            {
+                type: "input",
+                name: 'name',
+                message: 'Please enter name of department: '
+            }
+        ])
+        .then((data) => {
+            const sql = `INSERT INTO departments (name)
+                        VALUES ("${data.name}");`
+           
+            db.query(sql, (err,results) => {
+                if(err){
+                    console.log(err);
+                    return;
+                }
+                console.log();
+                console.log(`Added ${data.name} to the database`);
+            });
+        });
+        
+        prompt();
 }
 
 function addRole() {
