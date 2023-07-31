@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/fzhao888/Employee-Tracker#readme",
   "dependencies": {
-    "inquirer": "^8.2.4"
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.5.2"
   }
 }
