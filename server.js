@@ -138,9 +138,8 @@ function addADepartment() {
                 }
                 console.log();
                 console.log(`Added ${data.name} to the database`);
-            });
-
-            prompt();
+                prompt();
+            }); 
         });
 
 }
