@@ -159,39 +159,55 @@ function addRole() {
                 type: 'input',
                 name: 'salary',
                 message: 'Please enter salary: '
-            },
-            {
-                type: 'input',
-                name: 'department',
-                message: 'Please enter department: '
             }
         ])
         .then((data) => {
-            //gets department id from department name prompt
-            const sql1 = `SELECT id FROM departments
-            WHERE  departments.name = ? ;`
+
             // stores the args used for the final prepared statement
             const args = [data.name, data.salary];
 
-            db.promise().query(sql1, data.department)
-                .then((data) => {
-                    args.push(data[0][0].id);
-                    // inserts role
-                    const sql2 = ` 
+            // querys for all department names to use in prompt 
+            const sql = `SELECT name 
+                         FROM departments;`;
+            db.promise().query(sql)
+                .then((departmentArr) => {
+                    // prompt for department
+                    inquirer.prompt([
+                        {
+                            type: "list",
+                            name: "department",
+                            message: "Which department does the role belong to? ",
+                            choices: departmentArr[0]
+
+                        }
+                    ])
+                        .then((data) => {
+                            //gets department id from department name prompt
+                            const sql1 = `SELECT id FROM departments
+                                  WHERE  departments.name = ? ;`
+
+                            db.promise().query(sql1, data.department)
+                                .then((data) => {
+                                    args.push(data[0][0].id);
+                                    // inserts role
+                                    const sql2 = ` 
                         INSERT INTO roles (title,salary,department_id)
                         VALUES (?,?,?);`;
+                                    // inserts new role into roles
+                                    db.query(sql2, args,
+                                        (err, results) => {
+                                            if (err) {
+                                                console.log(err);
+                                                return;
+                                            }
+                                            console.log();
+                                            console.log(`Added ${args[0]} to the database`);
+                                            console.log();
+                                            prompt();
+                                        });
 
-                    db.query(sql2, args,
-                        (err, results) => {
-                            if (err) {
-                                console.log(err);
-                                return;
-                            }
-                            console.log();
-                            console.log(`Added ${args[0]} to the database`);
+                                });
                         });
-
-                    prompt();
                 });
         });
 }
@@ -377,7 +393,7 @@ function updateEmployeeRole() {
                                                       SET role_id = ${results[0][0].id}
                                                       WHERE CONCAT(first_name, " ", last_name) = ? ;`;
                                             db.query(sql4, args, (err, results) => {
-                                                if(err){
+                                                if (err) {
                                                     console.log(err);
                                                     return;
                                                 }
@@ -389,12 +405,6 @@ function updateEmployeeRole() {
                                 });
 
                         });
-
-
-
                 });
-
-
-
         });
 }
